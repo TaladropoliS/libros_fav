@@ -8,5 +8,4 @@ py3/
 db.sqlite3
 *.psd
 *.pdf
-*.txt
 *.doc
