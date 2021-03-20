@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+
+    <!-- *** para django *** -->
+    {% load static %}
+
+    <!-- *** para django *** -->
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}">
+
+    <!-- <link rel="shortcut icon" type="image/x-icon" href="../static/img/favicon.ico"> -->
+
+    <title>Libros</title>
+
+</head>
+
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-md navbar-light bg-light">
+        <div class="container-fluid mx-5 ">
+            <a class="navbar-brand" href="">
+                <img src="../static/img/libro.png" class="shadow p-1 mb-1 bg-light rounded" width="175px" alt="Wall">
+            </a>
+
+            <!-- Menu hamburguesa -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page">Bienvenido: <b>{{ request.session.log_name }}</b></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page">|</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/books">Libros</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page">|</a>
+                    </li>
+                    <a class="nav-link active" aria-current="page" href="/logout">log Out</a>
+                    <li class="nav-item">
+
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- FIN NAVBAR -->
+
+    <div class="container-lg bg-light my-5 mt-2">
+        <hr style="color: #0056b2" />
+        <div class="row">
+            <!--agregar en el class para dar un alto determinaro al row: style="height: 380px" -->
+
+            <div class="col-sm-6 pt-0">
+                <div class=" col-sm-12">
+                    <!-- AGREGAR LIBROS -->
+                    <form id="agregar" name="agregar" action="/books/agregar" method="post"> {% csrf_token %}
+                        <label for="agregar" class="form-label"><b>AGREGAR LIBRO</b></label>
+                        <p style="background-color: #E9ECEF"><small>Agrega un libro que te guste y su descripción. Rrequeridos(*).</small></p>
+
+                        <label for="agregar" class="form-label">Título</label>
+                        <input type="text" id="titulo" name="titulo" class="form-control" placeholder="Título (*)" required>
+
+                        <label for="agregar" class="form-label mt-3">Descripción</label>
+                        <textarea id="descripcion" name="descripcion" class="form-control" rows="3" placeholder="Descripcion (*)" required></textarea>
+                        <input type="submit" for="agregar" value="Agregar" class="btn btn-outline-secondary mt-1"></button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-sm-6 pt-1 text-center">
+                <div class="">
+                    <!-- LISTA DE LIBROS -->
+                    <h6><b>TODOS LOS LIBROS</b></h6>
+                    <hr style="color: #0056b2" /> {% for libro in libros %}
+
+                    <a class="nav-link active" aria-current="page" href="/books/{{libro.id}}"><b>{{ libro.titulo }}</b></a>
+                    <p>Subido por: {{ libro.subido_por_id.nombre }} {{ libro.subido_por_id.apellido }}<br> {% if libro in libros_favoritos %}
+                        <small><i>Este libro es uno de tus favoritos</i></small></p>
+
+                    <hr style="color: #0056b2" /> {% else %}
+                    <a class="nav-link active" aria-current="page" href="/books/add_favorito/{{libro.id}}">Agregar a Favoritos</a>
+                    <hr style="color: #0056b2" /> {% endif %} {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 text-center">
+        <img src="../static/img/libro.png" class="shadow p-0 m-0 bg-light" width="150px" alt="Libro">
+    </div>
+    <!-- FOOTER -->
+
+    <div id="footer " class="bg-light ">
+        <hr style="color: #0056b2" />
+        <div class="container w-50 ">
+            <div class="row justify-content-md-center py-4 ">
+                <div class="col text-center font-weight-light text-dark" style="margin-top: -1.0rem !important">
+                    <p>Libros Favoritos | TaladropoiS | CodingDojo<br>Fernando Taladriz © 2021</p>
+                </div>
+            </div>
+            <div class="row m-0 p-0"></div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 y Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js " integrity="sha384-KsvD1yqQ1/1+IA7gi3P0tyJcT3vR+NdBTt13hSJ2lnve8agRGXTTyNaBYmCR/Nwi " crossorigin="anonymous "></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.min.js " integrity="sha384-nsg8ua9HAw1y0W1btsyWgBklPnCUAFLuTMS2G72MMONqmOymq585AcH49TLBQObG " crossorigin="anonymous "></script>
+
+</body>
+
+</html>
